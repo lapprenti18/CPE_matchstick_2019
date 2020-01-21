@@ -8,6 +8,10 @@
 SRC	=	my_getnbr.c	\
 		main.c	\
 		my_str_to_word_array.c	\
+		my_putstr.c	\
+		cat.c	\
+		my_put_nbr.c	\
+		my_strlen.c	\
 
 NAME	=	matchstick
 

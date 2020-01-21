@@ -20,7 +20,7 @@ int check_pipe(char **tab_map, int line)
 void    print_table(int nb_line, map_t *map_game)
 {
     for (int z = 0; z < nb_line + 2; z += 1) {
-        write(1, map_game->tab_map[z], ((nb_line * 2) + 2));
+        write(1, map_game->tab_map[z], ((nb_line * 2) + 1));
         write(1, "\n", 1);
     }
 }
@@ -120,12 +120,15 @@ void print_updated_board_game(int line , int nb_matches, map_t *map_game,\
 
 int line_calc(int a, map_t *map_game, int line)
 {
-    char buffer[32000];
-    
+    size_t len = 0;
+    ssize_t read;
+    char *enter = NULL;
+
     for (; a == 0;) {
     write (0, "Line: ", 6);
-    read (0, buffer, 137);
-    map_game->line_player = my_getnbr(buffer);
+    if ((read = getline(&enter, &len, stdin)) == -1)
+        return (-1);
+    map_game->line_player = my_getnbr(enter);
         a = 1;
         if (map_game->line_player <= 0 || map_game->line_player > line) {
             write(0, "youston on a un pb avec la line\n", 32);
@@ -137,35 +140,62 @@ int line_calc(int a, map_t *map_game, int line)
 
 int matches_calc(int b, map_t *map_game, int matches)
 {
-    char buffer[32000];
+    size_t len = 0;
+    ssize_t read;
+    char *enter = NULL;
 
-    write (0, "Matches: ", 9);
-    read (0, buffer, 137);
-    map_game->matches_player = my_getnbr(buffer);
+    if ((read = getline(&enter, &len, stdin)) == -1)
+        return (-1);
+    map_game->matches_player = my_getnbr(enter);
     b = 1;
     if (map_game->matches_player <= 0 || map_game->matches_player > check_pipe\
     (map_game->tab_map, map_game->line_player) || map_game->matches_player \
     > matches) {
-        write(0, "youston on a un pb avec le nbr de matches\n", 48);
+        my_putstr("youston on a un pb avec le nbr de matches", 0, 1);
         b = 0;
     }
     return (b);
 }
 
-void player(map_t *map_game, char **av)
+int player(map_t *map_game, char **av)
 {
     int line = my_getnbr(av[1]);
     int matches = my_getnbr(av[2]);
     int a;
     int b = 0;
 
+    write(0, "\nYour turn:\n", 12);
     map_game->line_player = 0;
     map_game->matches_player = 0;
     for (; b == 0;) {
         a = 0;
-        a = line_calc(a, map_game, line);
+        if ((a = line_calc(a, map_game, line)) == -1)
+            return (-1);
+        write (0, "Matches: ", 9);
         b = matches_calc(b, map_game, matches);
     }
+    if (a == -1 || b == -1)
+        return (-1);
+    print_updated_board_game(map_game->line_player, map_game->\
+    matches_player, map_game, line);
+    return (0);
+}
+
+void ia(map_t *map_game, char **av)
+{
+    int temp = 0;
+    int pipe = 0;
+    int line = my_getnbr(av[1]);
+
+    for (; map_game->tab_map; temp += 1) {
+        if ((check_pipe(map_game->tab_map, temp)) != 0)
+            break;
+    }
+    pipe = (((my_getnbr(av[1]) - 1) * 2) + 3);
+    for (; map_game->tab_map[temp][pipe] != '|'; pipe -= 1);
+    map_game->tab_map[temp][pipe] = ' ';
+    my_putstr("\nAI's turn...\nAI removed 1 match(es) from line", 1, 0);
+    my_put_nbr(temp, 0, 1);
     print_updated_board_game(map_game->line_player, map_game->\
     matches_player, map_game, line);
 }
@@ -173,12 +203,17 @@ void player(map_t *map_game, char **av)
 int loop_game(map_t *map_game, char **av)
 {
     for (;end(map_game->tab_map) == 0 ;) {
-        player(map_game, av);
-        if (end(map_game->tab_map) == 1)
+        if (player(map_game, av) == -1)
+            return (0);
+        if (end(map_game->tab_map) == 1) {
+            my_putstr("You lost, too bad...", 0, 1);
             return (1);
-        // ia()
-        // if (end(map_game) == 1)
-        //     return (2);
+        }
+        ia(map_game, av);
+        if (end(map_game->tab_map) == 1) {
+            write(1, "I lost... snif... but I'll get you next time!!\n", 47);
+            return (2);
+        }
     }
 }
 
@@ -187,6 +222,8 @@ int main(int ac, char **av)
     map_t *map_game = malloc(sizeof(map_t));
 
     if (ac != 3)
+        return (84);
+    if (my_getnbr(av[1]) == 0 || my_getnbr(av[2]) == 0)
         return (84);
     create_map(my_getnbr(av[1]), map_game);
     map_game->tab_map = my_str_to_word_array(map_game->map);

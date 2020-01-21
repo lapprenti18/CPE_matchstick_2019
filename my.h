@@ -25,3 +25,7 @@ typedef struct map_s
 
 char **my_str_to_word_array(char *str);
 int my_getnbr(char *str);
+void    my_putstr(char *str, int space, int slash);
+char *cat(char *start, char *line);
+void    my_put_nbr(int nb, int space, int slash);
+int my_strlen(char *str);
