@@ -7,12 +7,15 @@
 
 int my_getnbr(char *str)
 {
-int i;
-int neg;
+int i = 0;
+int neg = 1;
 int n;
 
-    neg = 1;
-    i = 0;
+    for (int temp = 0; str[temp]; temp += 1) {
+        if (str[temp] < '0' && str[temp] != '\n' \
+        || str[temp] > '9' && str[temp] != '\n')
+            return (-1);
+    }
     while (str[i] != '\0' && (str[i] == '+' || str[i] == '-')) {
         if (str[i] == '-')
             neg = neg * -1;

@@ -12,6 +12,11 @@ SRC	=	my_getnbr.c	\
 		cat.c	\
 		my_put_nbr.c	\
 		my_strlen.c	\
+		check_pipe.c	\
+		creat_map.c	\
+		line_matches.c	\
+		print_tab.c	\
+		update_map.c	\
 
 NAME	=	matchstick
 
