@@ -7,6 +7,15 @@
 
 #include "my.h"
 
+void display_player(map_t *map_game)
+{
+    my_putstr("Player removed", 1, 0);
+    map_game->line_remove[my_strlen(map_game->line_remove) - 1] = '\0';
+    my_putstr(map_game->line_remove, 1, 0);
+    my_putstr("match(es) from line", 1, 0);
+    my_putstr(map_game->matches_remove, 0, 1);
+}
+
 int player(map_t *map_game, char **av)
 {
     int line = my_getnbr(av[1]);
@@ -21,11 +30,12 @@ int player(map_t *map_game, char **av)
         a = 0;
         if ((a = line_calc(a, map_game, line)) == -1)
             return (-1);
-        write (1, "Matches: ", 9);
+        write(1, "Matches: ", 9);
         b = matches_calc(b, map_game, matches);
     }
     if (a == -1 || b == -1)
         return (-1);
+    display_player(map_game);
     print_updated_board_game(map_game->line_player, map_game->\
     matches_player, map_game, line);
     return (0);

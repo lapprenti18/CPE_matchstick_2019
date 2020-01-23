@@ -19,16 +19,15 @@ int line_calc(int a, map_t *map_game, int line)
 {
     size_t len = 0;
     ssize_t read;
-    char *enter = NULL;
 
     for (; a == 0;) {
-    write (1, "Line: ", 6);
-    if ((read = getline(&enter, &len, stdin)) == -1)
+    write(1, "Line: ", 6);
+    if ((read = getline(&map_game->line_remove, &len, stdin)) == -1)
         return (-1);
-    map_game->line_player = my_getnbr(enter);
+    map_game->line_player = my_getnbr(map_game->line_remove);
         a = 1;
         if (map_game->line_player <= 0 || map_game->line_player > line) {
-            error_line(map_game, line, enter);
+            error_line(map_game, line, map_game->line_remove);
             a = 0;
         }
     }
@@ -56,11 +55,10 @@ int matches_calc(int b, map_t *map_game, int matches)
 {
     size_t len = 0;
     ssize_t read;
-    char *enter = NULL;
 
-    if ((read = getline(&enter, &len, stdin)) == -1)
+    if ((read = getline(&map_game->matches_remove, &len, stdin)) == -1)
         return (-1);
-    map_game->matches_player = my_getnbr(enter);
+    map_game->matches_player = my_getnbr(map_game->matches_remove);
     b = 1;
     if (map_game->matches_player <= 0 || map_game->matches_player > check_pipe\
     (map_game->tab_map, map_game->line_player) || map_game->matches_player \
