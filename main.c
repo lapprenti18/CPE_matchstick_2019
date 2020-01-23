@@ -10,7 +10,7 @@
 void display_player(map_t *map_game)
 {
     my_putstr("Player removed", 1, 0);
-    map_game->line_remove[my_strlen(map_game->line_remove) - 1] = '\0';
+    map_game->line_remove[my_strlen(map_game->matches_remove) - 1] = '\0';
     my_putstr(map_game->matches_remove, 1, 0);
     my_putstr("match(es) from line", 1, 0);
     my_putstr(map_game->line_remove, 0, 1);
