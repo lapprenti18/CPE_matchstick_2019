@@ -39,7 +39,13 @@ void error_matches(map_t *map_game, int matches)
 {
     if (map_game->matches_player > check_pipe\
     (map_game->tab_map, map_game->line_player))
-        my_putstr("Error: not enough matches on this line", 0, 1);
+        my_putstr("Error: not enough matches on this line", 1, 1);
+    if (map_game->matches_player > map_game->max_matches && map_game->\
+    matches_player <= check_pipe(map_game->tab_map, map_game->line_player)) {
+        my_putstr("Error: you cannot remove more than", 1, 0);
+        my_put_nbr(map_game->max_matches, 1, 0);
+        my_putstr("matches per turn", 0, 1);
+    }
     if (map_game->matches_player == 0)
         my_putstr("Error: you have to remove at least one match", 0, 1);
     if (map_game->matches_player == -1)

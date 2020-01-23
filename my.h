@@ -21,6 +21,7 @@ typedef struct map_s
     int nb_pipe;
     int line_player;
     int matches_player;
+    int max_matches;
 } map_t;
 
 char **my_str_to_word_array(char *str);

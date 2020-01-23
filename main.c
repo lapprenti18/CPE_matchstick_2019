@@ -46,14 +46,12 @@ void ia(map_t *map_game, char **av)
     map_game->tab_map[temp][pipe] = ' ';
     my_putstr("\nAI's turn...\nAI removed 1 match(es) from line", 1, 0);
     my_put_nbr(temp, 0, 1);
-    print_updated_board_game(map_game->line_player, map_game->\
-    matches_player, map_game, line);
+    print_table(line, map_game);
 }
 
 int loop_game(map_t *map_game, char **av)
 {
     for (;end(map_game->tab_map) == 0 ;) {
-        printf("yo\n");
         if (player(map_game, av) == -1)
             return (0);
         if (end(map_game->tab_map) == 1) {
@@ -79,5 +77,6 @@ int main(int ac, char **av)
     create_map(my_getnbr(av[1]), map_game);
     map_game->tab_map = my_str_to_word_array(map_game->map);
     print_table(my_getnbr(av[1]), map_game);
+    map_game->max_matches = my_getnbr(av[2]);
     return (loop_game(map_game, av));
 }
