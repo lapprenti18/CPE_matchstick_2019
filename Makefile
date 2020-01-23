@@ -17,6 +17,7 @@ SRC	=	my_getnbr.c	\
 		line_matches.c	\
 		print_tab.c	\
 		update_map.c	\
+		delete.c	\
 
 NAME	=	matchstick
 
