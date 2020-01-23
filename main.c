@@ -66,12 +66,12 @@ int loop_game(map_t *map_game, char **av)
             return (0);
         if (end(map_game->tab_map) == 1) {
             my_putstr("You lost, too bad...", 0, 1);
-            return (1);
+            return (2);
         }
         ia(map_game, av);
         if (end(map_game->tab_map) == 1) {
             write(1, "I lost... snif... but I'll get you next time!!\n", 47);
-            return (2);
+            return (1);
         }
     }
 }
