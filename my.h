@@ -47,3 +47,4 @@ void error_line(map_t *map_game, int line, char *enter);
 int line_calc(int a, map_t *map_game, int line);
 void error_matches(map_t *map_game, int matches);
 int matches_calc(int b, map_t *map_game, int matches);
+void delete_slash(map_t *map_game);
